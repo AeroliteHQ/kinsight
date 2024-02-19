@@ -1,0 +1,26 @@
+info:
+  contact: {}
+paths:
+  /api/topics:
+    get:
+      consumes:
+      - application/json
+      description: Get all Kafka Topics
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get All Kafka Topics
+swagger: "2.0"

@@ -1,5 +1,0 @@
-package skgo
-
-func CreateTopics() {
-
-}

@@ -3,8 +3,9 @@ package api
 import (
 	"github.com/AeroliteHQ/kinsight/server/pkg/config"
 	"github.com/rs/zerolog"
-	"net/http"
+	"log"
 	"os"
+	"strconv"
 )
 
 type API struct {
@@ -23,12 +24,10 @@ func NewAPI(cfg *config.Config) *API {
 }
 
 func (a *API) Start() {
-	mux := a.makeRouters()
+	app := a.makeRouters()
 	a.Config.APIConfig.ListenerPort = 7878
-	err := http.ListenAndServe(":7878", mux)
-	if err != nil {
-		return
-	}
+	log.Fatal(app.Listen(":" + strconv.Itoa(a.Config.APIConfig.ListenerPort)))
+
 	//listener, err := net.Listen("tcp", net.JoinHostPort("", strconv.Itoa(a.Config.APIConfig.ListenerPort)))
 	//if err != nil {
 	//	return

@@ -1,21 +1,34 @@
 package handler
 
-import "net/http"
+import (
+	"github.com/gofiber/fiber/v2"
+	"net/http"
+)
 
-func GetTopicsHandler() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello world!"))
-	}
+// GetTopicsHandler godoc
+// @Summary Get All Kafka Topics
+// @Description Get all Kafka Topics
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} string
+// @Failure 400 {object} error
+// @Failure 404 {object} error
+// @Failure 500 {object} error
+// @Router /api/topics [get]
+func GetTopicsHandler(ctx *fiber.Ctx) error {
+	return ctx.Status(http.StatusOK).JSON(fiber.Map{
+		"message": "Hello, World!",
+	})
 }
 
-func CreateTopicsHandler() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello world!"))
-	}
+func CreateTopicsHandler(ctx *fiber.Ctx) error {
+	return ctx.Status(http.StatusOK).JSON(fiber.Map{
+		"message": "Hello, World!",
+	})
 }
 
-func DeleteTopicHandler() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello world!"))
-	}
+func DeleteTopicsHandler(ctx *fiber.Ctx) error {
+	return ctx.Status(http.StatusOK).JSON(fiber.Map{
+		"message": "Hello, World!",
+	})
 }
