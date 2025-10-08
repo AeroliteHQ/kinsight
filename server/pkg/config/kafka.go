@@ -1,5 +1,11 @@
 package config
 
 type Kafka struct {
-	// internal server intance
+	Brokers       []string `yaml:"brokers"`
+	ClientID      string   `yaml:"clientId"`
+	SASLEnabled   bool     `yaml:"saslEnabled"`
+	SASLMechanism string   `yaml:"saslMechanism"`
+	SASLUsername  string   `yaml:"saslUsername"`
+	SASLPassword  string   `yaml:"saslPassword"`
+	TLSEnabled    bool     `yaml:"tlsEnabled"`
 }

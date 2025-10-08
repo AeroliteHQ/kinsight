@@ -1,37 +1,48 @@
 package api
 
 import (
-	"github.com/AeroliteHQ/kinsight/server/pkg/config"
-	"github.com/rs/zerolog"
+	"fmt"
 	"log"
 	"os"
-	"strconv"
+
+	"github.com/AeroliteHQ/kinsight/server/pkg/config"
+	"github.com/AeroliteHQ/kinsight/server/pkg/service"
+	"github.com/rs/zerolog"
 )
 
 type API struct {
-	// internal server intance
 	Config *config.Config
 	Log    *zerolog.Logger
+	Kafka  *service.KafkaService
 }
 
 func NewAPI(cfg *config.Config) *API {
-	zerolog.SetGlobalLevel(zerolog.ErrorLevel)
-	log := zerolog.New(os.Stderr).With().Timestamp().Logger()
+	zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	logger := zerolog.New(os.Stderr).With().Timestamp().Logger()
+
+	kafka, err := service.NewKafkaService(cfg.Kafka)
+	if err != nil {
+		logger.Warn().Err(err).Msg("failed to initialize kafka service")
+	}
+
 	return &API{
 		Config: cfg,
-		Log:    &log,
+		Log:    &logger,
+		Kafka:  kafka,
 	}
 }
 
 func (a *API) Start() {
 	app := a.makeRouters()
-	a.Config.APIConfig.ListenerPort = 7878
-	log.Fatal(app.Listen(":" + strconv.Itoa(a.Config.APIConfig.ListenerPort)))
 
-	//listener, err := net.Listen("tcp", net.JoinHostPort("", strconv.Itoa(a.Config.APIConfig.ListenerPort)))
-	//if err != nil {
-	//	return
-	//}
-	//event := a.Log.Info()
-	//event.Msgf("Server listening on address", "address", listener.Addr().String(), "port", a.Config.APIConfig.ListenerPort)
+	addr := fmt.Sprintf("%s:%d", a.Config.APIConfig.ListenerAddress, a.Config.APIConfig.ListenerPort)
+	a.Log.Info().Str("address", addr).Msg("starting server")
+
+	log.Fatal(app.Listen(addr))
+}
+
+func (a *API) Shutdown() {
+	if a.Kafka != nil {
+		a.Kafka.Close()
+	}
 }

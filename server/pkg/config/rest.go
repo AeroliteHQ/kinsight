@@ -1,6 +1,7 @@
 package config
 
 type APIConfig struct {
-	ListenerAddress string
-	ListenerPort    int
+	ListenerAddress string   `yaml:"listenerAddress"`
+	ListenerPort    int      `yaml:"listenerPort"`
+	CORSOrigins     []string `yaml:"corsOrigins"`
 }

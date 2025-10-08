@@ -1,5 +1,6 @@
 package config
 
 type KInSight struct {
-	// internal server intance
+	Environment string `yaml:"environment"`
+	Version     string `yaml:"version"`
 }
